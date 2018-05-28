@@ -2,6 +2,6 @@ const test = require('ava');
 const m = require('.');
 
 test('validate-response', t => {
-    t.true(true);
-    t.is(m, m);
+    t.notThrows(() => m(200)({statusCode: 200}));
+    t.throws(() => m(200)({statusCode: 500}));
 });
