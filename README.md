@@ -1,6 +1,8 @@
 # validate-response
 
-validate-response description here
+Validate http response (for example from scra).
+
+_very unstable and 'Under construction' yet._
 
 [![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
@@ -14,7 +16,10 @@ npm i validate-response
 ## Usage
 
 ```js
-const validate-response = require('validate-response');
+const validateResponse = require('validate-response');
+const scra = require('scra');
+
+scra('example.com').then(validateResponse()); // ValidateResponceError if smth wrong
 ```
 
 ## License
