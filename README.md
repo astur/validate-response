@@ -19,7 +19,7 @@ npm i validate-response
 const validateResponse = require('validate-response');
 const scra = require('scra');
 
-scra('example.com').then(validateResponse()); // ValidateResponceError if smth wrong
+scra('example.com').then(validateResponse(200)); // ValidateResponceError if response.statusCode !== 200
 ```
 
 ## License

@@ -1,4 +1,4 @@
-module.exports = () => response => {
-    if(response.statusCode === 200) return;
+module.exports = code => response => {
+    if(response.statusCode === code) return;
     throw new Error('ValidateResponceError');
 };
