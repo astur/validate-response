@@ -16,7 +16,16 @@ test('valid status codes', async t => {
         .then(res => t.notThrows(() => m([200])(res)));
 
     await request('httpbin.org/status/200')
-        .then(res => t.notThrows(() => m([200, 400])(res)));
+        .then(res => t.notThrows(() => m([200, 300], 400)(res)));
+
+    await request('httpbin.org/status/200')
+        .then(res => t.notThrows(() => m('200')(res)));
+
+    await request('httpbin.org/status/200')
+        .then(res => t.notThrows(() => m('200,300 ,  400')(res)));
+
+    await request('httpbin.org/status/200')
+        .then(res => t.notThrows(() => m(['200,300', '400', 500])(res)));
 });
 
 test('invalid status codes', async t => {
@@ -26,11 +35,17 @@ test('invalid status codes', async t => {
     await request('httpbin.org/status/200')
         .then(res => t.throws(() => m(400)(res), 'Expected status code in [400] (200 found)'));
 
-    await request('httpbin.org/status/500')
-        .then(res => t.throws(() => m(200, 300, 400)(res), 'Expected status code in [200, 300, 400] (500 found)'));
+    await request('httpbin.org/status/200')
+        .then(res => t.throws(() => m([300, 400], 500)(res), 'Expected status code in [300, 400, 500] (200 found)'));
+
+    await request('httpbin.org/status/200')
+        .then(res => t.throws(() => m('400')(res), 'Expected status code in [400] (200 found)'));
 
     await request('httpbin.org/status/500')
-        .then(res => t.throws(() => m([200, 300, 400])(res), 'Expected status code in [200, 300, 400] (500 found)'));
+        .then(res => t.throws(() => m('200, 300, 400')(res), 'Expected status code in [200, 300, 400] (500 found)'));
+
+    await request('httpbin.org/status/500')
+        .then(res => t.throws(() => m(['100', '200 ,300', 400])(res), 'Expected status code in [100, 200, 300, 400] (500 found)'));
 });
 
 test('response type check', t => {

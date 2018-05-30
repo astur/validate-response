@@ -1,7 +1,10 @@
 const arfy = require('arfy');
 module.exports = (...codes) => {
-    codes = arfy(...codes);
+    codes = arfy(...codes)
+        .map(v => typeof v === 'string' ? v.split(/\s*,\s*/) : v);
+    codes = [].concat(...codes).map(Number);
     if(!codes.length) codes = [200];
+
     return response => {
         if(!(response instanceof require('http').IncomingMessage)) throw new TypeError('IncomingMessage expected');
         if(codes.includes(response.statusCode)) return;
