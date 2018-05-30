@@ -14,6 +14,10 @@
   "engines": {
     "node": ">=8.0.0"
   },
+  "dependencies": {
+    "arfy": "0.0.2",
+    "easytype": "0.0.5"
+  },
   "devDependencies": {
     "ava": "^0.22.0",
     "eslint": "^4.7.2",
@@ -25,8 +29,5 @@
     "response",
     "http"
   ],
-  "license": "MIT",
-  "dependencies": {
-    "arfy": "0.0.2"
-  }
+  "license": "MIT"
 }
