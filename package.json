@@ -25,5 +25,8 @@
     "response",
     "http"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "arfy": "0.0.2"
+  }
 }
