@@ -9,7 +9,12 @@ module.exports = (...options) => {
         options = {codes: arfy(...options)};
     }
     options.codes = options.codes.length ?
-        [].concat(...options.codes.map(v => typeof v === 'string' ? v.split(/\s*,\s*/) : v)).map(Number) :
+        [].concat(...options.codes.map(v => typeof v === 'string' ? v.split(/\s*,\s*/) : v))
+            .map(v => {
+                const n = +v;
+                if(!type.isNumber.finite(n) || n < 100 || n > 599) throw new TypeError(`HTTP response code expected ("${v}" found)`);
+                return n;
+            }) :
         null;
 
     return response => {
