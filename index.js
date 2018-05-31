@@ -31,5 +31,8 @@ module.exports = (...options) => {
         if(type.isArray(options.contentLength) && (+response.headers['content-length'] < options.contentLength[0] || +response.headers['content-length'] > options.contentLength[1])){
             throw new Error(`Expected content length in range ${options.contentLength.join('-')} (${response.headers['content-length']} found)`);
         }
+        if(type.isRegExp(options.bodyMatch) && type.isString(response.body) && !options.bodyMatch.test(response.body)){
+            throw new Error(`Expected body string match to ${options.bodyMatch}`);
+        }
     };
 };

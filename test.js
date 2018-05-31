@@ -22,11 +22,15 @@ test.before('setup', async () => {
         res.setHeader('Content-Type', 'application/json');
         res.end('___');
     });
+    s.on('/long', (req, res) => {
+        res.end('___TEST___');
+    });
     await s.listen(1703);
     s.$200 = await request('localhost:1703/200');
     s.$500 = await request('localhost:1703/500');
     s.$GoodJSON = await request('localhost:1703/json/good');
     s.$BadJSON = await request('localhost:1703/json/bad');
+    s.$Long = await request('localhost:1703/long');
 });
 
 test('no status codes', t => {
@@ -88,6 +92,12 @@ test('contentLength', t => {
     t.throws(() => m({contentLength: 10})(s.$200), 'Expected content length 10 (2 found)');
     t.throws(() => m({contentLength: [5, 10]})(s.$200), 'Expected content length in range 5-10 (2 found)');
     t.throws(() => m({contentLength: [0, 10]})(s.$GoodJSON), 'Expected content length in range 0-10 (13 found)');
+});
+
+test('bodyMatch', t => {
+    t.notThrows(() => m({bodyMatch: /TEST/})(s.$Long));
+    t.notThrows(() => m({bodyMatch: /test/i})(s.$Long));
+    t.throws(() => m({bodyMatch: /TEST/})(s.$200), 'Expected body string match to /TEST/');
 });
 
 test.after('cleanup', async () => {
