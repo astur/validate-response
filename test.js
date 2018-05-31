@@ -15,107 +15,51 @@ test.before('setup', async () => {
         res.end('error');
     });
     await s.listen(1703);
+    s.$200 = await request('localhost:1703/200');
+    s.$500 = await request('localhost:1703/500');
 });
 
-test('no status codes', async t => {
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m()(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m({})(res)));
-
-    await request('localhost:1703/500')
-        .then(res => t.notThrows(() => m()(res)));
-
-    await request('localhost:1703/500')
-        .then(res => t.notThrows(() => m({})(res)));
+test('no status codes', t => {
+    t.notThrows(() => m()(s.$200));
+    t.notThrows(() => m({})(s.$200));
+    t.notThrows(() => m()(s.$500));
+    t.notThrows(() => m({})(s.$500));
 });
 
-test('valid status codes', async t => {
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m(200)(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m(200, 300)(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m([200])(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m([200, 300], 400)(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m('200')(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m('200,300 ,  400')(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m(['200,300', '400', 500])(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m({codes: 200})(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m({codes: '200, 300'})(res)));
-
-    await request('localhost:1703/200')
-        .then(res => t.notThrows(() => m({codes: [200, '300', '400, 500']})(res)));
+test('valid status codes', t => {
+    t.notThrows(() => m(200)(s.$200));
+    t.notThrows(() => m(200, 300)(s.$200));
+    t.notThrows(() => m([200])(s.$200));
+    t.notThrows(() => m([200, 300], 400)(s.$200));
+    t.notThrows(() => m('200')(s.$200));
+    t.notThrows(() => m('200,300 ,  400')(s.$200));
+    t.notThrows(() => m(['200,300', '400', 500])(s.$200));
+    t.notThrows(() => m({codes: 200})(s.$200));
+    t.notThrows(() => m({codes: '200, 300'})(s.$200));
+    t.notThrows(() => m({codes: [200, '300', '400, 500']})(s.$200));
 });
 
-test('invalid status codes', async t => {
-    await request('localhost:1703/500')
-        .then(res => t.throws(() => m(200)(res), 'Expected status code in [200] (500 found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m(400)(res), 'Expected status code in [400] (200 found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m([300, 400], 500)(res), 'Expected status code in [300, 400, 500] (200 found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m('400')(res), 'Expected status code in [400] (200 found)'));
-
-    await request('localhost:1703/500')
-        .then(res => t.throws(() => m('200, 300, 400')(res), 'Expected status code in [200, 300, 400] (500 found)'));
-
-    await request('localhost:1703/500')
-        .then(res => t.throws(() => m(['100', '200 ,300', 400])(res), 'Expected status code in [100, 200, 300, 400] (500 found)'));
-
-    await request('localhost:1703/500')
-        .then(res => t.throws(() => m({codes: 400})(res), 'Expected status code in [400] (500 found)'));
-
-    await request('localhost:1703/500')
-        .then(res => t.throws(() => m({codes: '300, 400'})(res), 'Expected status code in [300, 400] (500 found)'));
-
-    await request('localhost:1703/500')
-        .then(res => t.throws(() => m({codes: ['100', '200 ,300', 400]})(res), 'Expected status code in [100, 200, 300, 400] (500 found)'));
+test('invalid status codes', t => {
+    t.throws(() => m(200)(s.$500), 'Expected status code in [200] (500 found)');
+    t.throws(() => m(400)(s.$200), 'Expected status code in [400] (200 found)');
+    t.throws(() => m([300, 400], 500)(s.$200), 'Expected status code in [300, 400, 500] (200 found)');
+    t.throws(() => m('400')(s.$200), 'Expected status code in [400] (200 found)');
+    t.throws(() => m('200, 300, 400')(s.$500), 'Expected status code in [200, 300, 400] (500 found)');
+    t.throws(() => m(['100', '200 ,300', 400])(s.$500), 'Expected status code in [100, 200, 300, 400] (500 found)');
+    t.throws(() => m({codes: 400})(s.$500), 'Expected status code in [400] (500 found)');
+    t.throws(() => m({codes: '300, 400'})(s.$500), 'Expected status code in [300, 400] (500 found)');
+    t.throws(() => m({codes: ['100', '200 ,300', 400]})(s.$500), 'Expected status code in [100, 200, 300, 400] (500 found)');
 });
 
-test('status codes check', async t => {
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m(1)(res), 'HTTP response code expected ("1" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m(600)(res), 'HTTP response code expected ("600" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m('bad')(res), 'HTTP response code expected ("bad" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m('200, bad')(res), 'HTTP response code expected ("bad" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m(200, 'bad', 'very bad')(res), 'HTTP response code expected ("bad" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m(200, {codes: 200})(res), 'HTTP response code expected ("[object Object]" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m({codes: [200, 'bad']})(res), 'HTTP response code expected ("bad" found)'));
-
-    await request('localhost:1703/200')
-        .then(res => t.throws(() => m({codes: 'bad'})(res), 'HTTP response code expected ("bad" found)'));
+test('status codes check', t => {
+    t.throws(() => m(1)(s.$200), 'HTTP response code expected ("1" found)');
+    t.throws(() => m(600)(s.$200), 'HTTP response code expected ("600" found)');
+    t.throws(() => m('bad')(s.$200), 'HTTP response code expected ("bad" found)');
+    t.throws(() => m('200, bad')(s.$200), 'HTTP response code expected ("bad" found)');
+    t.throws(() => m(200, 'bad', 'very bad')(s.$200), 'HTTP response code expected ("bad" found)');
+    t.throws(() => m(200, {codes: 200})(s.$200), 'HTTP response code expected ("[object Object]" found)');
+    t.throws(() => m({codes: [200, 'bad']})(s.$200), 'HTTP response code expected ("bad" found)');
+    t.throws(() => m({codes: 'bad'})(s.$200), 'HTTP response code expected ("bad" found)');
 });
 
 test('response type check', t => {
