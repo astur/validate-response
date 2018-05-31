@@ -25,5 +25,8 @@ module.exports = (...options) => {
         if(options.checkJSON && response.headers['content-type'] === 'application/json' && !type.isObject(response.body)){
             throw new Error(`Expected json-parsed object in body (${type(response.body)} found)`);
         }
+        if(type.isNumber(options.contentLength) && options.contentLength !== +response.headers['content-length']){
+            throw new Error(`Expected content length ${options.contentLength} (${response.headers['content-length']} found)`);
+        }
     };
 };

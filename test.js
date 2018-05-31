@@ -82,6 +82,11 @@ test('checkJSON', t => {
     t.throws(() => m({checkJSON: true})(s.$BadJSON), 'Expected json-parsed object in body (String found)');
 });
 
+test('contentLength', t => {
+    t.notThrows(() => m({contentLength: 2})(s.$200));
+    t.throws(() => m({contentLength: 10})(s.$200), 'Expected content length 10 (2 found)');
+});
+
 test.after('cleanup', async () => {
     await s.close();
 });
