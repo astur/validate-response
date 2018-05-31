@@ -14,9 +14,19 @@ test.before('setup', async () => {
         res.statusCode = 500;
         res.end('error');
     });
+    s.on('/json/good', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.end('{"a":1,"b":2}');
+    });
+    s.on('/json/bad', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.end('___');
+    });
     await s.listen(1703);
     s.$200 = await request('localhost:1703/200');
     s.$500 = await request('localhost:1703/500');
+    s.$GoodJSON = await request('localhost:1703/json/good');
+    s.$BadJSON = await request('localhost:1703/json/bad');
 });
 
 test('no status codes', t => {
@@ -64,6 +74,12 @@ test('status codes check', t => {
 
 test('response type check', t => {
     t.throws(() => m(200)({statusCode: 200}), TypeError);
+});
+
+test('checkJSON', t => {
+    t.notThrows(() => m({checkJSON: true})(s.$200));
+    t.notThrows(() => m({checkJSON: true})(s.$GoodJSON));
+    t.throws(() => m({checkJSON: true})(s.$BadJSON), 'Expected json-parsed object in body (String found)');
 });
 
 test.after('cleanup', async () => {

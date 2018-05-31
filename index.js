@@ -22,5 +22,8 @@ module.exports = (...options) => {
         if(options.codes && !options.codes.includes(response.statusCode)){
             throw new Error(`Expected status code in [${options.codes.join(', ')}] (${response.statusCode} found)`);
         }
+        if(options.checkJSON && response.headers['content-type'] === 'application/json' && !type.isObject(response.body)){
+            throw new Error(`Expected json-parsed object in body (${type(response.body)} found)`);
+        }
     };
 };
