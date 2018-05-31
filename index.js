@@ -28,5 +28,8 @@ module.exports = (...options) => {
         if(type.isNumber(options.contentLength) && options.contentLength !== +response.headers['content-length']){
             throw new Error(`Expected content length ${options.contentLength} (${response.headers['content-length']} found)`);
         }
+        if(type.isArray(options.contentLength) && (+response.headers['content-length'] < options.contentLength[0] || +response.headers['content-length'] > options.contentLength[1])){
+            throw new Error(`Expected content length in range ${options.contentLength.join('-')} (${response.headers['content-length']} found)`);
+        }
     };
 };

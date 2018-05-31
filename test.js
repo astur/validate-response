@@ -84,7 +84,10 @@ test('checkJSON', t => {
 
 test('contentLength', t => {
     t.notThrows(() => m({contentLength: 2})(s.$200));
+    t.notThrows(() => m({contentLength: [1, 3]})(s.$200));
     t.throws(() => m({contentLength: 10})(s.$200), 'Expected content length 10 (2 found)');
+    t.throws(() => m({contentLength: [5, 10]})(s.$200), 'Expected content length in range 5-10 (2 found)');
+    t.throws(() => m({contentLength: [0, 10]})(s.$GoodJSON), 'Expected content length in range 0-10 (13 found)');
 });
 
 test.after('cleanup', async () => {
