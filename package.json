@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "arfy": "0.0.2",
+    "c-e": "^1.0.1",
     "easytype": "0.0.5"
   },
   "devDependencies": {

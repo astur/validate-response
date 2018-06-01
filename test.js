@@ -110,6 +110,19 @@ test('validator', t => {
     })(s.$200), 'Custom validator threw "Error: BOOM!"');
 });
 
+test('custom error', t => {
+    const err = t.throws(() => m({
+        codes: [300, 400],
+        checkJSON: true,
+        contentLength: 10,
+        bodyMatch: /TEST/,
+        validator: () => 'BAH!',
+    })(s.$BadJSON), m.ValidateResponceError);
+    t.is(err.message, 'Validation failed. See reasons');
+    t.true(Array.isArray(err.reasons));
+    t.is(err.reasons.length, 5);
+});
+
 test.after('cleanup', async () => {
     await s.close();
 });

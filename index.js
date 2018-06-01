@@ -1,5 +1,15 @@
 const arfy = require('arfy');
 const type = require('easytype');
+const ce = require('c-e');
+
+const ValidateResponceError = ce('ValidateResponceError', Error, function(reasons){
+    if(reasons.length === 1){
+        this.message = reasons[0];
+    } else {
+        this.message = 'Validation failed. See reasons';
+        this.reasons = reasons;
+    }
+});
 
 module.exports = (...options) => {
     if(type.isObject(options[0])){
@@ -16,7 +26,7 @@ module.exports = (...options) => {
                 return n;
             }) :
         null;
-    // ValidateResponceError
+
     return response => {
         if(!(response instanceof require('http').IncomingMessage)) throw new TypeError('IncomingMessage expected');
 
@@ -49,7 +59,7 @@ module.exports = (...options) => {
         }
 
         if(reasons.length){
-            throw new Error(reasons[0]);
+            throw new ValidateResponceError(reasons);
         }
     };
 };
