@@ -34,5 +34,16 @@ module.exports = (...options) => {
         if(type.isRegExp(options.bodyMatch) && type.isString(response.body) && !options.bodyMatch.test(response.body)){
             throw new Error(`Expected body string match to ${options.bodyMatch}`);
         }
+        if(type.isFunction(options.validator)){
+            let isValid;
+            try {
+                isValid = options.validator(response);
+            } catch(e){
+                throw new Error(`Custom validator threw "${e}"`);
+            }
+            if(isValid){
+                throw new Error(`Custom validator failed with messahe: "${isValid}"`);
+            }
+        }
     };
 };

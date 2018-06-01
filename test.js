@@ -100,6 +100,16 @@ test('bodyMatch', t => {
     t.throws(() => m({bodyMatch: /TEST/})(s.$200), 'Expected body string match to /TEST/');
 });
 
+test('validator', t => {
+    t.notThrows(() => m({validator: () => {}})(s.$200));
+    t.throws(() => m({validator: () => 'BAH!'})(s.$200), 'Custom validator failed with messahe: "BAH!"');
+    t.throws(() => m({
+        validator: () => {
+            throw new Error('BOOM!');
+        },
+    })(s.$200), 'Custom validator threw "Error: BOOM!"');
+});
+
 test.after('cleanup', async () => {
     await s.close();
 });
