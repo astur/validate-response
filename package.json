@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "astur <astur@yandex.ru> (http://kozlov.am/)",
   "scripts": {
-    "test": "eslint . && ava"
+    "test": "eslint . && nyc ava -v"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "eslint": "^4.7.2",
     "eslint-config-astur": "0.0.2",
     "mockser": "^1.0.1",
+    "nyc": "^12.0.2",
     "scra": "^1.0.0"
   },
   "keywords": [
