@@ -15,16 +15,16 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "arfy": "0.0.2",
-    "c-e": "^1.0.1",
-    "easytype": "0.0.5"
+    "arfy": "^1.0.0",
+    "c-e": "^1.0.3",
+    "easytype": "^1.0.0"
   },
   "devDependencies": {
-    "ava": "^0.22.0",
+    "ava": "^0.25.0",
     "eslint": "^4.7.2",
     "eslint-config-astur": "0.0.2",
-    "mockser": "0.0.2",
-    "scra": "^0.2.7"
+    "mockser": "^1.0.1",
+    "scra": "^1.0.0"
   },
   "keywords": [
     "validation",
