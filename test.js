@@ -1,12 +1,9 @@
 const test = require('ava');
 const m = require('.');
 const request = require('scra');
-const mockser = require('mockser');
-
-let s;
+const s = require('mockser')();
 
 test.before('setup', async () => {
-    s = mockser();
     s.on('/200', (req, res) => {
         res.end('ok');
     });
