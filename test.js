@@ -119,6 +119,7 @@ test('custom error', t => {
     t.true(Array.isArray(err.reasons));
     t.is(err.reasons.length, 5);
     t.is(err.url, 'http://localhost:1703/json/bad');
+    t.is(err.statusCode, 200);
 });
 
 test.after('cleanup', async () => {

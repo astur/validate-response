@@ -10,6 +10,7 @@ const ValidateResponceError = ce('ValidateResponceError', Error, function(reason
         this.reasons = reasons;
     }
     this.url = response.url;
+    this.statusCode = response.statusCode;
 });
 
 module.exports = (...options) => {
