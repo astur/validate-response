@@ -12,6 +12,7 @@ const ValidateResponceError = ce('ValidateResponceError', Error, function(reason
     this.url = response.url;
     this.statusCode = response.statusCode;
     this.bodyLength = response.body.length;
+    this.headers = response.headers;
 });
 
 module.exports = (...options) => {

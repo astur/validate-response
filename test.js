@@ -121,6 +121,7 @@ test('custom error', t => {
     t.is(err.url, 'http://localhost:1703/json/bad');
     t.is(err.statusCode, 200);
     t.is(err.bodyLength, 3);
+    t.deepEqual(Object.keys(err.headers), ['content-type', 'date', 'connection', 'content-length']);
 });
 
 test.after('cleanup', async () => {
