@@ -22,8 +22,8 @@ const validator = validateResponse(options);
 
 validator(response);
 
-// validator throws error if response is invalid, otherwise do nothing.
-// also validator throws error if response is not instance of http.IncomingMessage.
+// validator throws ValidateResponceError if response is invalid, otherwise do nothing.
+// also validator throws TypeError if response is not instance of http.IncomingMessage.
 
 // validator created without any params will treat every response as valid.
 ```
@@ -59,6 +59,16 @@ But usually it looks like this:
 ```js
 const validator = validateResponse(200);
 ```
+
+### ValidateResponceError:
+
+On bad responce `validator` throws `ValidateResponceError`, that has some useful additional fields:
+
+* `reasons` - array of text messages describing the reasons why `ValidateResponceError` was thrown. If there is only one reason, that will no `reasons` field and that reason message will placed in `message` field of error object.
+* `url` - same field of responce.
+* `statusCode` - same field of responce.
+* `bodyLength` - length of `responce.body`.
+* `headers` - key-value object with responce headers.
 
 ## License
 
