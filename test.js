@@ -118,6 +118,7 @@ test('custom error', t => {
     t.is(err.message, 'Validation failed. See reasons');
     t.true(Array.isArray(err.reasons));
     t.is(err.reasons.length, 5);
+    t.is(err.url, 'http://localhost:1703/json/bad');
 });
 
 test.after('cleanup', async () => {

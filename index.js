@@ -2,13 +2,14 @@ const arfy = require('arfy');
 const type = require('easytype');
 const ce = require('c-e');
 
-const ValidateResponceError = ce('ValidateResponceError', Error, function(reasons){
+const ValidateResponceError = ce('ValidateResponceError', Error, function(reasons, response){
     if(reasons.length === 1){
         this.message = reasons[0];
     } else {
         this.message = 'Validation failed. See reasons';
         this.reasons = reasons;
     }
+    this.url = response.url;
 });
 
 module.exports = (...options) => {
@@ -59,7 +60,7 @@ module.exports = (...options) => {
         }
 
         if(reasons.length){
-            throw new ValidateResponceError(reasons);
+            throw new ValidateResponceError(reasons, response);
         }
     };
 };
