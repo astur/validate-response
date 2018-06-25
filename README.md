@@ -64,7 +64,8 @@ const validator = validateResponse(200);
 
 On bad responce `validator` throws `ValidateResponceError`, that has some useful additional fields:
 
-* `reasons` - array of text messages describing the reasons why `ValidateResponceError` was thrown. If there is only one reason, that will no `reasons` field and that reason message will placed in `message` field of error object.
+* `reasons` - array of human readable text messages describing the reasons why `ValidateResponceError` was thrown. If there is only one reason, that will no `reasons` field and that reason message will placed in `message` field of error object.
+* `codes` - array of sort text codes for corresponding `reasons`. Every code is one of  'E_INVALID_STATUS', 'E_INVALID_JSON', 'E_INVALID_LENGTH', 'E_INVALID_MATCH' or 'E_INVALID_RESPONCE'.
 * `url` - same field of responce.
 * `statusCode` - same field of responce.
 * `bodyLength` - length of `responce.body`.
