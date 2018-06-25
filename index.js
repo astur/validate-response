@@ -4,11 +4,12 @@ const ce = require('c-e');
 
 const ValidateResponceError = ce('ValidateResponceError', Error, function(reasons, response){
     if(reasons.length === 1){
-        this.message = reasons[0];
+        this.message = reasons[0][1];
     } else {
         this.message = 'Validation failed. See reasons';
-        this.reasons = reasons;
+        this.reasons = reasons.map(v => v[1]);
     }
+    this.codes = reasons.map(v => v[0]);
     this.url = response.url;
     this.statusCode = response.statusCode;
     this.bodyLength = response.body.length;
@@ -37,28 +38,28 @@ module.exports = (...options) => {
         const reasons = [];
 
         if(options.codes && !options.codes.includes(response.statusCode)){
-            reasons.push(`Expected status code in [${options.codes.join(', ')}] (${response.statusCode} found)`);
+            reasons.push(['E_INVALID_STATUS', `Expected status code in [${options.codes.join(', ')}] (${response.statusCode} found)`]);
         }
         if(options.checkJSON && response.headers['content-type'] === 'application/json' && !type.isObject(response.body)){
-            reasons.push(`Expected json-parsed object in body (${type(response.body)} found)`);
+            reasons.push(['E_INVALID_JSON', `Expected json-parsed object in body (${type(response.body)} found)`]);
         }
         if(type.isNumber(options.contentLength) && options.contentLength !== +response.headers['content-length']){
-            reasons.push(`Expected content length ${options.contentLength} (${response.headers['content-length']} found)`);
+            reasons.push(['E_INVALID_LENGTH', `Expected content length ${options.contentLength} (${response.headers['content-length']} found)`]);
         }
         if(type.isArray(options.contentLength) && (+response.headers['content-length'] < options.contentLength[0] || +response.headers['content-length'] > options.contentLength[1])){
-            reasons.push(`Expected content length in range ${options.contentLength.join('-')} (${response.headers['content-length']} found)`);
+            reasons.push(['E_INVALID_LENGTH', `Expected content length in range ${options.contentLength.join('-')} (${response.headers['content-length']} found)`]);
         }
         if(type.isRegExp(options.bodyMatch) && type.isString(response.body) && !options.bodyMatch.test(response.body)){
-            reasons.push(`Expected body string match to ${options.bodyMatch}`);
+            reasons.push(['E_INVALID_MATCH', `Expected body string match to ${options.bodyMatch}`]);
         }
         if(type.isFunction(options.validator)){
             try {
                 const isValid = options.validator(response);
                 if(isValid){
-                    reasons.push(`Custom validator failed with messahe: "${isValid}"`);
+                    reasons.push(['E_INVALID_RESPONCE', `Custom validator failed with message: "${isValid}"`]);
                 }
             } catch(e){
-                reasons.push(`Custom validator threw "${e}"`);
+                reasons.push(['E_INVALID_RESPONCE', `Custom validator threw "${e}"`]);
             }
         }
 

@@ -99,7 +99,7 @@ test('bodyMatch', t => {
 
 test('validator', t => {
     t.notThrows(() => m({validator: () => {}})(s.$200));
-    t.throws(() => m({validator: () => 'BAH!'})(s.$200), 'Custom validator failed with messahe: "BAH!"');
+    t.throws(() => m({validator: () => 'BAH!'})(s.$200), 'Custom validator failed with message: "BAH!"');
     t.throws(() => m({
         validator: () => {
             throw new Error('BOOM!');
@@ -118,6 +118,13 @@ test('custom error', t => {
     t.is(err.message, 'Validation failed. See reasons');
     t.true(Array.isArray(err.reasons));
     t.is(err.reasons.length, 5);
+    t.deepEqual(err.codes, [
+        'E_INVALID_STATUS',
+        'E_INVALID_JSON',
+        'E_INVALID_LENGTH',
+        'E_INVALID_MATCH',
+        'E_INVALID_RESPONCE',
+    ]);
     t.is(err.url, 'http://localhost:1703/json/bad');
     t.is(err.statusCode, 200);
     t.is(err.bodyLength, 3);
