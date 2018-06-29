@@ -25,7 +25,7 @@
     "eslint-config-astur": "0.0.2",
     "mockser": "^1.0.1",
     "nyc": "^12.0.2",
-    "scra": "^1.0.0"
+    "scra": "^1.0.1"
   },
   "keywords": [
     "validation",
