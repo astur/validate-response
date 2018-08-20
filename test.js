@@ -98,7 +98,7 @@ test('bodyMatch', t => {
 });
 
 test('validator', t => {
-    t.notThrows(() => m({validator: () => {}})(s.$200));
+    t.notThrows(() => m({validator: () => undefined})(s.$200));
     t.throws(() => m({validator: () => 'BAH!'})(s.$200), 'Custom validator failed with message: "BAH!"');
     t.throws(() => m({
         validator: () => {
