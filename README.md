@@ -23,7 +23,7 @@ const validator = validateResponse(options);
 validator(response);
 
 // validator throws ValidateResponceError if response is invalid, otherwise do nothing.
-// also validator throws TypeError if response is not instance of http.IncomingMessage.
+// also validator throws TypeError if response is not instance of http.IncomingMessage (now disabled).
 
 // validator created without any params will treat every response as valid.
 ```
