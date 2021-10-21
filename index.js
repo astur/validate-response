@@ -1,7 +1,7 @@
 const arfy = require('arfy');
 const type = require('easytype');
 const ce = require('c-e');
-const http = require('http');
+// const http = require('http');
 
 const ValidateResponceError = ce('ValidateResponceError', Error, function(reasons, response){
     if(reasons.length === 1){
@@ -34,7 +34,7 @@ module.exports = (...options) => {
         null;
 
     return response => {
-        if(!(response instanceof http.IncomingMessage)) throw new TypeError('IncomingMessage expected');
+        // if(!(response instanceof http.IncomingMessage)) throw new TypeError('IncomingMessage expected');
 
         const reasons = [];
 
