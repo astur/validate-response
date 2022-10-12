@@ -35,8 +35,6 @@ module.exports = (...options) => {
         null;
 
     return response => {
-        // if(!(response instanceof http.IncomingMessage)) throw new TypeError('IncomingMessage expected');
-
         const reasons = [];
 
         if(options.codes && !options.codes.includes(response.statusCode)){

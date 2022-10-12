@@ -75,10 +75,6 @@ test('status codes check', t => {
     t.throws(() => m({codes: 'bad'})(s.$200), 'HTTP response code expected ("bad" found)');
 });
 
-// test('response type check', t => {
-//     t.throws(() => m(200)({statusCode: 200}), TypeError);
-// });
-
 test('checkJSON', t => {
     t.notThrows(() => m({checkJSON: true})(s.$200));
     t.notThrows(() => m({checkJSON: true})(s.$GoodJSON));
