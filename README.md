@@ -38,6 +38,8 @@ validator(response);
 
 - `checkJSON` - boolean, if `true` error will throws on response that has `content-type` set to `application/json`, but has string in `body` field (not object). Defaults to false.
 
+- `checkType` - boolean, if `true` error will throws on response that is not `instanceof http.IncomingMessage`. Defaults to false.
+
 - `contentLength` - positive number or array of two numbers, means value of response `content-length` must be equal to number or in range of two numbers. If not (or if response has no `content-length` header) error will be thrown.
 
 - `bodyMatch` - regexp for testing response `body` string. If `body` does not match regexp, error will be thrown.
@@ -70,6 +72,7 @@ On bad responce `validator` throws `ValidateResponceError`, that has some useful
 * `statusCode` - same field of responce.
 * `bodyLength` - length of `responce.body`.
 * `headers` - key-value object with responce headers.
+* `cookies` - same field of responce.
 
 ## License
 
