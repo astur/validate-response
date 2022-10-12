@@ -1,7 +1,7 @@
 const arfy = require('arfy');
 const type = require('easytype');
 const ce = require('c-e');
-// const http = require('http');
+const http = require('http');
 
 const ValidateResponceError = ce('ValidateResponceError', Error, function(reasons, response){
     if(reasons.length === 1){
@@ -44,6 +44,9 @@ module.exports = (...options) => {
         }
         if(options.checkJSON && response.headers['content-type'] === 'application/json' && !type.isObject(response.body)){
             reasons.push(['E_INVALID_JSON', `Expected json-parsed object in body (${type(response.body)} found)`]);
+        }
+        if(options.checkType && !(response instanceof http.IncomingMessage)){
+            reasons.push(['E_INVALID_TYPE', `Expected IncomingMessage (${response.constructor.name} found)`]);
         }
         if(type.isNumber(options.contentLength) && options.contentLength !== +response.headers['content-length']){
             reasons.push(['E_INVALID_LENGTH', `Expected content length ${options.contentLength} (${response.headers['content-length']} found)`]);
