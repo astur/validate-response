@@ -15,6 +15,7 @@ const ValidateResponceError = ce('ValidateResponceError', Error, function(reason
     this.statusCode = response.statusCode;
     this.bodyLength = response.body.length;
     this.headers = response.headers;
+    this.cookies = response.cookies;
 });
 
 module.exports = (...options) => {
