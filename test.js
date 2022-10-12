@@ -85,6 +85,14 @@ test('checkJSON', t => {
     t.throws(() => m({checkJSON: true})(s.$BadJSON), 'Expected json-parsed object in body (String found)');
 });
 
+test('checkType', t => {
+    t.notThrows(() => m({checkType: true})(s.$200));
+    const e = new Error();
+    e.body = '';
+    const err = t.throws(() => m({checkType: true})(e), 'Expected IncomingMessage (Error found)');
+    t.deepEqual(err.codes, ['E_INVALID_TYPE']);
+});
+
 test('contentLength', t => {
     t.notThrows(() => m({contentLength: 2})(s.$200));
     t.notThrows(() => m({contentLength: [1, 3]})(s.$200));
