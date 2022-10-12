@@ -28,6 +28,8 @@ test.before('setup', async () => {
     s.$GoodJSON = await request('localhost:1703/json/good');
     s.$BadJSON = await request('localhost:1703/json/bad');
     s.$Long = await request('localhost:1703/long');
+
+    s.$BadJSON.cookies = {test: 'TEST'};
 });
 
 test('no status codes', t => {
@@ -129,6 +131,7 @@ test('custom error', t => {
     t.is(err.statusCode, 200);
     t.is(err.bodyLength, 3);
     t.deepEqual(Object.keys(err.headers), ['content-type', 'date', 'connection', 'content-length']);
+    t.deepEqual(err.cookies, {test: 'TEST'});
 });
 
 test.after('cleanup', async () => {
